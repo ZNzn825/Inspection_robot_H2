@@ -1,6 +1,6 @@
 # Inspection_robot_H2
 
-> 加氢站燃爆风险智能巡检机器人 · Hydrogen Station Explosion-Risk Intelligent Inspection Robot
+> 加氢站燃爆智能巡检机器人 · Hydrogen Station Explosion Intelligent Inspection Robot
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Ubuntu%2020.04-orange.svg)]()
