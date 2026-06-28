@@ -1,0 +1,40 @@
+# Qt
+*.pro.user
+*.o
+*.obj
+moc_*
+ui_*.h
+qrc_*.cpp
+Makefile
+
+# IDE
+.vscode/
+.idea/
+
+# Build & Runtime
+build/
+tmp/
+output/
+pos/
+config.ini
+
+# Libraries & SDKs
+lib/
+dependents/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large data & docs
+*.pcd
+*.mp4
+*.webm
+*.zip
+*.rar
+*.irsx
+*.pptx
+*.pdf
+*.docx
+*.doc
+*.xlsx
