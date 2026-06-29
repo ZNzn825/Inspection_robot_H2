@@ -10,6 +10,71 @@
 
 ---
 
+## 📑 目录
+
+- [目录结构](#目录结构)
+- [项目简介](#项目简介)
+- [系统架构](#系统架构)
+- [核心功能](#核心功能)
+  - [1. 自主导航与 SLAM](#1-自主导航与-slam)
+  - [2. 机械臂检测](#2-机械臂检测)
+  - [3. 多模态传感检测](#3-多模态传感检测)
+  - [4. 视觉目标检测](#4-视觉目标检测)
+  - [5. 巡检任务编排](#5-巡检任务编排)
+- [硬件平台](#硬件平台)
+- [软件架构](#软件架构)
+- [算法概览](#算法概览)
+- [项目部署](#项目部署)
+- [界面预览](#界面预览)
+- [实验验证](#实验验证)
+- [引用](#引用)
+- [许可证](#许可证)
+
+---
+
+## 目录结构
+
+```
+Inspection_robot_H2/
+├── src/                           # 上位机控制程序 (Qt/C++)
+│   ├── AGV_test.pro               # Qt 项目文件
+│   ├── main.cpp                   # 程序入口
+│   ├── mainwindow.cpp             # 主窗口 (核心集成)
+│   ├── mainwindow.h               # 主窗口头文件
+│   ├── mainwindow.ui              # UI 布局文件
+│   ├── agv.cpp / agv.h           # AGV 底盘 CAN 总线控制
+│   ├── aubo_robot.cpp / aubo_robot.h  # AUBO 机械臂控制
+│   ├── sensormonitor.cpp / .h    # 传感器数据采集与显示
+│   ├── opencamera.cpp             # ZED 相机初始化和帧采集
+│   ├── shipinliu.cpp              # 视频流处理与 HSV 目标检测
+│   ├── enter_save.cpp             # 图像保存工具
+│   ├── LED.cpp / LED.h           # LED 指示灯自定义控件
+│   ├── particleprogress.cpp / .h # 粒子特效进度条控件
+│   ├── DataThread.h               # 传感器数据采集线程
+│   ├── zcan.h                     # CAN 协议帧定义
+│   ├── util.h                     # 工具宏与辅助函数
+│   ├── demo_simple_goal.cpp       # 独立巡检导航 ROS 节点
+│   └── include/
+│       └── Camera.hpp             # Stereolabs ZED SDK C++ 封装
+├── algorithms/                    # 核心算法
+│   ├── laserMapping.cpp           # Fast-LIO LiDAR SLAM
+│   ├── IMU_Processing.hpp         # IMU 前向传播 + 点云去畸变
+│   ├── nav_point.cpp              # 队列式多点导航
+│   └── shipinliu.cpp              # HSV 色彩空间视觉检测
+├── docs/                          # 文档
+│   ├── architecture.md            # 系统架构详解
+│   ├── hardware.xlsx              # 硬件清单与接线说明
+│   ├── deployment.md              # 部署指南（从零到运行）
+│   └── images/                    # 上位机界面截图
+├── assets/
+│   └── robot.jpg                  # 机器人实物照片
+├── .gitignore
+├── LICENSE                        # MIT
+└── README.md
+```
+
+---
+
 ## 项目简介
 
 **Inspection_robot_H2** 是一款专为加氢站防爆场景打造的自主巡检机器人系统。机器人搭载 Livox MID360 激光雷达，基于 **Fast-LIO** 算法实现全域 3D SLAM 建图与自主导航；融合 **ZED 2 双目相机**、**UTi586A 红外热像仪**、**氢气浓度传感器**和**紫外火焰探测器**等多模态传感器，可对场站内设备高温异常、明火隐患、氢气泄漏等燃爆风险进行全方位检测与预警。上位机基于 **Qt 5 + C++17** 开发，将 AGV 底盘控制、AUBO 机械臂操控、传感器数据采集、实时视频目标检测、ROS 导航栈管理统一集成到一个图形化界面中。
@@ -129,50 +194,9 @@
 
 ---
 
-## 目录结构
 
-```
-Inspection_robot_H2/
-├── src/                           # 上位机控制程序 (Qt/C++)
-│   ├── AGV_test.pro               # Qt 项目文件
-│   ├── main.cpp                   # 程序入口
-│   ├── mainwindow.cpp             # 主窗口 (核心集成)
-│   ├── mainwindow.h               # 主窗口头文件
-│   ├── mainwindow.ui              # UI 布局文件
-│   ├── agv.cpp / agv.h           # AGV 底盘 CAN 总线控制
-│   ├── aubo_robot.cpp / aubo_robot.h  # AUBO 机械臂控制
-│   ├── sensormonitor.cpp / .h    # 传感器数据采集与显示
-│   ├── opencamera.cpp             # ZED 相机初始化和帧采集
-│   ├── shipinliu.cpp              # 视频流处理与 HSV 目标检测
-│   ├── enter_save.cpp             # 图像保存工具
-│   ├── LED.cpp / LED.h           # LED 指示灯自定义控件
-│   ├── particleprogress.cpp / .h # 粒子特效进度条控件
-│   ├── DataThread.h               # 传感器数据采集线程
-│   ├── zcan.h                     # CAN 协议帧定义
-│   ├── util.h                     # 工具宏与辅助函数
-│   ├── demo_simple_goal.cpp       # 独立巡检导航 ROS 节点
-│   └── include/
-│       └── Camera.hpp             # Stereolabs ZED SDK C++ 封装
-├── algorithms/                    # 核心算法
-│   ├── laserMapping.cpp           # Fast-LIO LiDAR SLAM
-│   ├── IMU_Processing.hpp         # IMU 前向传播 + 点云去畸变
-│   ├── nav_point.cpp              # 队列式多点导航
-│   └── shipinliu.cpp              # HSV 色彩空间视觉检测
-├── docs/                          # 文档
-│   ├── architecture.md            # 系统架构详解
-│   ├── hardware.xlsx              # 硬件清单与接线说明
-│   ├── deployment.md              # 部署指南（从零到运行）
-│   └── images/                    # 上位机界面截图
-├── assets/
-│   └── robot.jpg                  # 机器人实物照片
-├── .gitignore
-├── LICENSE                        # MIT
-└── README.md
-```
 
----
-
-## 快速开始
+## 项目部署
 
 ### 环境要求
 
