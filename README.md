@@ -259,13 +259,15 @@ export ROS_WORKSPACE=~/ws_sentry
 
 ## 界面预览
 
-| 主界面 | 上位机界面 |
-|:---:|:---:|
-| 待补充 | ![上位机界面](docs/images/interface.png) |
+### 上位机主界面
 
-| 上位机界面1 |
+![上位机主界面](docs/images/interface.png)
+
+### 部署场景
+
+| 室外场景 | 室内场景 |
 |:---:|:---:|
-| ![室外场景](docs/images/interface1.png) | ![室内场景](docs/images/interface3.png) |
+| ![室外部署](docs/images/interface1.png) | ![室内部署](docs/images/interface3.png) |
 
 ---
 
