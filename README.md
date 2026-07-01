@@ -70,7 +70,8 @@ Inspection_robot_H2/
 │   └── robot.jpg                  # 机器人实物照片
 ├── .gitignore
 ├── LICENSE                        # MIT
-└── README.md
+└── README.md                      # 项目总览
+└── README_Reocalization.md        # 项目重定位部分
 ```
 
 ---
@@ -252,6 +253,7 @@ cd ~/ws_sentry/src
 cd ~/ws_sentry && catkin_make
 echo "source ~/ws_sentry/devel/setup.bash" >> ~/.bashrc
 ```
+- 具体的导航部署参考 [README_Reocalization.md](README_Reocalization.md)。
 
 ### 6. 编译上位机
 
